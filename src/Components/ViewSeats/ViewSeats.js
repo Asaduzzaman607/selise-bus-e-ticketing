@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import WeekendOutlinedIcon from "@material-ui/icons/WeekendOutlined";
 import { useState } from "react";
-import { useStateValue } from "../Redux/StateProvider/Index";
 import "./ViewSeats.css";
 const ViewSeats = ({ busId, fare = 500 }) => {
   const seats = [
@@ -76,55 +75,69 @@ const ViewSeats = ({ busId, fare = 500 }) => {
   const [selectedSeat, setSelectedSeat] = useState([]);
 
   const handleSeatSelection = (selected, available) => {
-    if (
-      available === 0 &&
-      !selectedSeat.find((founded) => founded === selected)
-    ) {
-      const bookedSeat = [...selectedSeat, selected];
-      setSelectedSeat(bookedSeat);
-      let timeOut = setTimeout(...selectedSeat, 6000);
-      clearTimeout(timeOut);
-      timeOut = setTimeout(...selectedSeat, 6000);
+    if (number == false) {
+      if (
+        available === 0 &&
+        !selectedSeat.find((founded) => founded === selected)
+      ) {
+        const bookedSeat = [...selectedSeat, selected];
+        setSelectedSeat(bookedSeat);
+        // let timeOut = setTimeout(...selectedSeat, 6000);
+        // clearTimeout(timeOut);
+        // timeOut = setTimeout(...selectedSeat, 6000);
+
+        // timeout();
+      }
     }
   };
+  const [number, setNumber] = useState(false);
+  useEffect(() => {
+    if (number == false)
+      var timer = setTimeout(() => setSelectedSeat([]), 1000);
+
+    return () => clearTimeout(timer);
+  }, [!number]);
 
   const amount = fare * selectedSeat.length;
   console.log(amount);
 
-  const [{ basket }, dispatch] = useStateValue();
+  // const timeout = () =>
+  //   setTimeout(function () {
+  //     setSelectedSeat([]);
+  //   }, 6000);
 
-  const addToBasket = (id) => {
-    dispatch({
-      type: "Add-to-basket",
-      item: {
-        id: id,
-        fare: fare,
-      },
-    });
+  // var myVar;
+  // function myFunction() {
+  //   myVar = setTimeout(function () {
+  //     setSelectedSeat([]);
+  //   }, 6000);
+  // }
+  const ShowDetails = () => {
+    setNumber(true);
   };
 
   return (
     <div className="container">
       <div className="row d-flex seatStatusColor">
-        <li className="d-flex mr-3">
+        <li style={seatsStyle[1]} className="d-flex mr-3">
           <WeekendOutlinedIcon /> <p>BOOKED(M)</p>{" "}
         </li>
-        <li className="d-flex mr-3">
+        <li style={seatsStyle[2]} className="d-flex mr-3">
           <WeekendOutlinedIcon /> <p>BOOKED(F)</p>{" "}
         </li>
-        <li className="d-flex mr-3">
+        <li style={seatsStyle[3]} className="d-flex mr-3">
           <WeekendOutlinedIcon /> <p>BLOCKED</p>{" "}
         </li>
         <li className="d-flex mr-3">
           <WeekendOutlinedIcon /> <p>AVAILABLE</p>{" "}
         </li>
-        <li className="d-flex mr-3">
+        <li style={{ color: "green" }} className="d-flex mr-3">
           <WeekendOutlinedIcon /> <p>SELECTED</p>{" "}
         </li>
-        <li className="d-flex mr-3">
+        <li style={seatsStyle[4]} className="d-flex mr-3">
           <WeekendOutlinedIcon /> <p>SOLD(M)</p>{" "}
         </li>
-        <li className="d-flex mr-3">
+        <li style={seatsStyle[5]} className="d-flex mr-3">
           <WeekendOutlinedIcon /> <p>SOLD(F)</p>{" "}
         </li>
       </div>
@@ -133,11 +146,7 @@ const ViewSeats = ({ busId, fare = 500 }) => {
           <ul className="d-flex flex-wrap mt-5 pt-5">
             {seats.map((seat, index) => (
               <li
-                onClick={() => {
-                  handleSeatSelection(index, seat);
-                  addToBasket();
-                }}
-                // onClick={() => handleSeatSelection(index, seat)}
+                onClick={() => handleSeatSelection(index, seat)}
                 style={
                   selectedSeat.find((activeSeat) => activeSeat == index)
                     ? { color: "green" }
@@ -155,19 +164,25 @@ const ViewSeats = ({ busId, fare = 500 }) => {
           <h2>Seat Information</h2>
         </div>
         <div className="col-md-5">
-          <form>
-            <div className="form-group">
-              <label for="phone">Your Phone Number</label> <br />
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-                required
-              />
-              <button className="redButton ml-5"> Verify</button>
-            </div>
-          </form>
+          {number ? (
+            <h1>details</h1>
+          ) : (
+            <form>
+              <div className="form-group">
+                <label for="phone">Your Phone Number</label> <br />
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                  required
+                />
+                <button onClick={ShowDetails} className="redButton ml-5">
+                  Verify
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </div>

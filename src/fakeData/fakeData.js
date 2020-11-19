@@ -94,7 +94,7 @@ const fakeData = [
     arrivalTime: "9:26 AM",
     seatsAvailable: 26,
     fare: 452,
-    journeyDate: "10/8/2020",
+    journeyDate: "20/11/2020",
     returnDate: "10/6/2020",
   },
   {

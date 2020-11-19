@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Grid, makeStyles, Paper, Select } from "@material-ui/core";
+import ViewSeats from "../../ViewSeats/ViewSeats";
 
 const useStyles = makeStyles({
   root: {},
@@ -14,8 +15,16 @@ const useStyles = makeStyles({
   },
 });
 
-const Index = ({ filteredData }) => {
-  console.log(filteredData);
+const Index = ({ flt }) => {
+  const { seatsAvailable, id } = flt;
+
+  const [show, setShow] = useState(false);
+  
+
+  const ShowSeats = () => {
+    setShow(!show);
+  };
+
   const classes = useStyles();
   return (
     <>
@@ -37,7 +46,7 @@ const Index = ({ filteredData }) => {
             <Grid item md={2}>
               <div className="d-flex">
                 <p>ARRIVAL TIME</p>
-                <p>35</p>
+                <p>{seatsAvailable}</p>
               </div>
             </Grid>
             <Grid item md={2}>
@@ -50,10 +59,13 @@ const Index = ({ filteredData }) => {
               <p>500</p>
             </Grid>
             <Grid item md={2}>
-              <button className="redButton">View Seats</button>
+              <button onClick={() => ShowSeats()} className="redButton">
+                View Seats
+              </button>
             </Grid>
           </Grid>
         </Paper>
+        {show && <ViewSeats busId={id}></ViewSeats>}
       </Container>
     </>
   );

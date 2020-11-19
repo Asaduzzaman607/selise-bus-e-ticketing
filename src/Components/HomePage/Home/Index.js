@@ -70,10 +70,10 @@ const Index = () => {
   }, []);
 
   // useEffect(async () => {
-  //   const districts = await axios.get(
-  //     "https://bdapis.herokuapp.com/api/v1.0/districts"
+  //   const districtss = await axios.get(
+  //     "https://cors-anywhere.herokuapp.com/https://bdapis.herokuapp.com/api/v1.0/districts?fbclid=IwAR3ndby6Q7vcVeh9sb2q2_l2Re4New7m0pqQ5d-bJPW_s-CUbVDwq3XGC_U"
   //   );
-  //   console.log(districts);
+  //   console.log(districtss.data);
   // }, []);
 
   // handle Search
@@ -177,7 +177,9 @@ const Index = () => {
           </div>
         </div>
       </header>
-      <SearchedComponent filtered={filtered}></SearchedComponent>
+      {filtered.map((flt) => (
+        <SearchedComponent flt={flt}></SearchedComponent>
+      ))}
     </>
   );
 };
