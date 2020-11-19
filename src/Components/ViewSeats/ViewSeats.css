@@ -1,0 +1,11 @@
+.seats-container{
+    border: 2px solid grey;
+    margin-bottom: 40px;
+}
+
+.seats-container li{
+   list-style: none;
+}
+.seatStatusColor li{
+    list-style: none;
+}
