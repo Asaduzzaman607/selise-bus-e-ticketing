@@ -7,23 +7,44 @@ const useStyles = makeStyles({
   paper: {
     padding: "30px",
     margin: "auto",
-    backgroundColor: "#E87482",
+    backgroundColor: "white",
+    marginBottom: "10px",
   },
   headerForm: {
     marginLeft: "30x",
     textAlign: "center",
   },
+  policy: {
+    color: "red",
+    fontStyle: "italic",
+  },
+  busName: {
+    color: "#7B1516",
+  },
 });
 
 const Index = ({ flt }) => {
-  const { seatsAvailable, id } = flt;
+  const {
+    from,
+    to,
+    seatsAvailable,
+    id,
+    departureTime,
+    arrivalTime,
+    startingPoint,
+    endingPoint,
+    busType,
+    fare,
+  } = flt;
 
   const [show, setShow] = useState(false);
-  
 
   const ShowSeats = () => {
     setShow(!show);
   };
+
+  const startingFrom = from.substring(0, 3);
+  const destination = to.substring(0, 3);
 
   const classes = useStyles();
   return (
@@ -32,36 +53,51 @@ const Index = ({ flt }) => {
         <Paper className={classes.paper}>
           <Grid container>
             <Grid item md={2}>
-              <div className="d-flex">
-                <p>DEPARTURE TIME</p>
-                <p>35</p>
+              <div>
+                <h5 className={classes.busName}>GreenLine</h5>
+                <div>
+                  <p>{id}</p>
+                  <div className="d-flex">
+                    <p className="mr-2">
+                      {startingFrom} - {destination}
+                    </p>
+                    <p>{busType ? "AC" : "Non AC"}</p>
+                  </div>
+                  <p>Starting point :{startingPoint}</p>
+                  <p>End Point : {endingPoint}</p>
+                </div>
               </div>
             </Grid>
             <Grid item md={2}>
-              <div className="d-flex">
+              <div>
                 <p>DEPARTURE TIME</p>
-                <p>35</p>
+                <p>{departureTime}</p>
               </div>
             </Grid>
             <Grid item md={2}>
-              <div className="d-flex">
+              <div>
                 <p>ARRIVAL TIME</p>
+                <p>{arrivalTime}</p>
+              </div>
+            </Grid>
+            <Grid item md={2}>
+              <div>
+                <p>SEAT AVAILABLE</p>
                 <p>{seatsAvailable}</p>
               </div>
             </Grid>
             <Grid item md={2}>
-              <div className="d-flex">
-                <p>SEAT AVAILABLE</p>
-                <p>35</p>
+              <p>{fare}</p>
+            </Grid>
+            <Grid item md={2}>
+              <div>
+                <button onClick={() => ShowSeats()} className="redButton">
+                  View Seats
+                </button>
+                <p>
+                  <small className={classes.policy}>Cancellation Policy</small>
+                </p>
               </div>
-            </Grid>
-            <Grid item md={2}>
-              <p>500</p>
-            </Grid>
-            <Grid item md={2}>
-              <button onClick={() => ShowSeats()} className="redButton">
-                View Seats
-              </button>
             </Grid>
           </Grid>
         </Paper>

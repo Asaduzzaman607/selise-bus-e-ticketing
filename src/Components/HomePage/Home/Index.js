@@ -68,12 +68,13 @@ const Index = () => {
     const storeData = fakeData;
     setDatas(storeData);
   }, []);
-
+  
+  // const [districtss, setDistricts]
   // useEffect(async () => {
   //   const districtss = await axios.get(
   //     "https://cors-anywhere.herokuapp.com/https://bdapis.herokuapp.com/api/v1.0/districts?fbclid=IwAR3ndby6Q7vcVeh9sb2q2_l2Re4New7m0pqQ5d-bJPW_s-CUbVDwq3XGC_U"
   //   );
-  //   console.log(districtss.data);
+  //   setDistricts(districtss.data);
   // }, []);
 
   // handle Search

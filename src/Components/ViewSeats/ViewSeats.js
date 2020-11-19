@@ -73,47 +73,35 @@ const ViewSeats = ({ busId, fare = 500 }) => {
   ];
 
   const [selectedSeat, setSelectedSeat] = useState([]);
-
+  const [number, setNumber] = useState(false);
+  var timeout;
   const handleSeatSelection = (selected, available) => {
-    if (number == false) {
+    if (number) {
+    } else {
       if (
         available === 0 &&
         !selectedSeat.find((founded) => founded === selected)
       ) {
         const bookedSeat = [...selectedSeat, selected];
         setSelectedSeat(bookedSeat);
-        // let timeOut = setTimeout(...selectedSeat, 6000);
-        // clearTimeout(timeOut);
-        // timeOut = setTimeout(...selectedSeat, 6000);
-
-        // timeout();
       }
     }
   };
-  const [number, setNumber] = useState(false);
+
   useEffect(() => {
-    if (number == false)
+    if (number === false)
       var timer = setTimeout(() => setSelectedSeat([]), 1000);
 
     return () => clearTimeout(timer);
-  }, [!number]);
+  });
 
   const amount = fare * selectedSeat.length;
   console.log(amount);
 
-  // const timeout = () =>
-  //   setTimeout(function () {
-  //     setSelectedSeat([]);
-  //   }, 6000);
-
-  // var myVar;
-  // function myFunction() {
-  //   myVar = setTimeout(function () {
-  //     setSelectedSeat([]);
-  //   }, 6000);
-  // }
+  
   const ShowDetails = () => {
     setNumber(true);
+    console.log(number);
   };
 
   return (

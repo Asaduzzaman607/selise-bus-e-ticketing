@@ -9,8 +9,8 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-          <Home></Home>
-          {/* <Homee></Homee> */}
+          {/* <Home></Home> */}
+          <Homee></Homee>
         </Route>
         <Route path="/viewSeats">
           <ViewSeats></ViewSeats>
