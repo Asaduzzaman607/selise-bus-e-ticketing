@@ -26,7 +26,7 @@ const Index = () => {
   //   setDistricts(district.data);
   // }, []);
 
-  //needed State
+  //needed States
   const [dataset, setDataset] = useState([]);
   const [district, setDistrict] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -46,13 +46,17 @@ const Index = () => {
 
   // using useForm to get the input values
   const onSubmit = (data) => {
-    const date = data.date; //2020-11-19
+    const date = data.journeyDate; //2020-11-19
     const from = data.from;
     const to = data.to;
+    console.log(typeof date, date);
+
+    console.log(to);
 
     const filterData = dataset.filter(
-      (flt) => (flt.from === from && flt.to === to) || flt.date === date
+      (flt) => flt.from === from && flt.to === to && flt.journeyDate === date //  filtering Data after taking inputs
     );
+
     setFiltered(filterData);
   };
 
@@ -81,7 +85,7 @@ const Index = () => {
                 <label htmlFor="FROM">FROM</label>
                 <br />
                 <select
-                  id="cars"
+                  id="from"
                   value={fromLocation}
                   ref={register({ required: true })}
                   name="from"
@@ -97,10 +101,10 @@ const Index = () => {
               <Grid item md={2}>
                 <label htmlFor="FROM">TO</label> <br />
                 <select
-                  id="cars"
+                  id="to"
                   value={toLocation}
                   ref={register({ required: true })}
-                  name="from"
+                  name="to"
                   onChange={handleToLocation}
                 >
                   {district.map((option) => (
@@ -139,9 +143,19 @@ const Index = () => {
           </form>
         </Paper>
       </Container>
-      {filtered.map((filter) => (
-        <SearchedComponent filter={filter} key={filter.id}></SearchedComponent>
-      ))}
+
+      {filtered.length > 0 ? (
+        filtered.map((filter) => (
+          <SearchedComponent
+            filter={filter}
+            key={filter.id}
+          ></SearchedComponent>
+        ))
+      ) : (
+        <p className="text-center" style={{ color: "red" }}>
+          Not Found
+        </p>
+      )}
     </>
   );
 };
