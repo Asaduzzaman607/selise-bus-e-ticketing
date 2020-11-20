@@ -1,185 +1,146 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Input from "@material-ui/core/Input";
-import Grid from "@material-ui/core/Grid";
-import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
-import DateFnsUtils from "@date-io/date-fns";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import fakeData from "../../../fakeData/fakeData";
+import { Container, Grid, makeStyles, Paper } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import SearchedComponent from "../SearchedComponent/Index";
+import fakeData from "../../../fakeData/fakeData";
+import districts from "../../../fakeData/districts";
 import "./Index.css";
-import axios from "axios";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import { useEffect } from "react";
-import { Button, Paper, Select } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  // root: {
-  //   "& > *": {
-  //     margin: theme.spacing(1),
-  //   },
-  // },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+const useStyles = makeStyles({
+  root: {},
+  paper: {
+    padding: "30px",
+    margin: "auto",
+    backgroundColor: "#E87482",
   },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
+  headerForm: {
+    marginLeft: "30x",
+    textAlign: "center",
   },
-}));
-
-const districts = [
-  { name: "Dhaka" },
-  { name: "Chittagong" },
-  { name: "Rajshahi" },
-  { name: "Sylhet" },
-];
+});
 
 const Index = () => {
-  const classes = useStyles();
-
-  // needed states
-
-  const [datas, setDatas] = useState([]);
-
-  const [selectedDate, setSelectedDate] = useState({
-    journeyDate: new Date(),
-    returnDate: new Date(),
-  });
-  const journeyYear = selectedDate.journeyDate.getFullYear();
-  const journeyMonth = selectedDate.journeyDate.getMonth();
-  const journeyDay = selectedDate.journeyDate.getDay();
-  console.log(journeyYear);
-
-  const newFormattedDate = `${journeyDay}/${journeyMonth}/${journeyYear}`;
-  console.log(newFormattedDate);
-
-  const [fromLocation, setFromLocation] = React.useState("");
-
-  const [toLocation, setToLocation] = React.useState("");
-
-  // storing  data into a state
-  useEffect(() => {
-    const storeData = fakeData;
-    setDatas(storeData);
-  }, []);
-  
-  // const [districtss, setDistricts]
   // useEffect(async () => {
-  //   const districtss = await axios.get(
+  //   const district = await axios.get(
   //     "https://cors-anywhere.herokuapp.com/https://bdapis.herokuapp.com/api/v1.0/districts?fbclid=IwAR3ndby6Q7vcVeh9sb2q2_l2Re4New7m0pqQ5d-bJPW_s-CUbVDwq3XGC_U"
   //   );
-  //   setDistricts(districtss.data);
+  //   setDistricts(district.data);
   // }, []);
 
-  // handle Search
+  //needed State
+  const [dataset, setDataset] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const handleSearch = () => {
-    console.log(fromLocation, toLocation);
-    let filteredData = datas.filter(
-      (data) =>
-        data.from === fromLocation ||
-        data.to === toLocation ||
-        data.journeyDate === newFormattedDate
+  const [fromLocation, setFromLocation] = useState("");
+  const [toLocation, setToLocation] = useState("");
+
+  // destructuring from useForm
+  const { register, handleSubmit } = useForm();
+
+  // loading data
+  useEffect(() => {
+    const storeData = fakeData;
+    const districtData = districts;
+    setDataset(storeData);
+    setDistrict(districtData);
+  }, []);
+
+  // using useForm to get the input values
+  const onSubmit = (data) => {
+    const date = data.date; //2020-11-19
+    const from = data.from;
+    const to = data.to;
+
+    const filterData = dataset.filter(
+      (flt) => (flt.from === from && flt.to === to) || flt.date === date
     );
-    setFiltered(filteredData);
-    console.log(filteredData);
+    setFiltered(filterData);
   };
 
-  const handleJourneyDate = (date) => {
-    const newDate = { ...selectedDate };
-    newDate.journeyDate = date;
-    setSelectedDate(newDate);
-  };
-
-  const handleReturnDate = (date) => {
-    const newDate = { ...selectedDate };
-    newDate.returnDate = date;
-    setSelectedDate(newDate);
-  };
-
+  // handle from location to set on a state
   const handleFromLocation = (event) => {
     setFromLocation(event.target.value);
   };
-
+  // handle to location to set on a state
   const handleToLocation = (event) => {
     setToLocation(event.target.value);
   };
 
+  // material Ui classes
+  const classes = useStyles();
+
   return (
     <>
-      <header className="container form-container mt-5">
-        <div className="row">
-          <div className="col-md-10 offset-md-1">
-            <form className={classes.root} noValidate autoComplete="off">
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={fromLocation}
-                onChange={handleFromLocation}
-              >
-                {districts.map((option) => (
-                  <MenuItem key={option.name} value={option.name}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </Select>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={toLocation}
-                onChange={handleToLocation}
-              >
-                {districts.map((option) => (
-                  <MenuItem key={option.name} value={option.name}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </Select>
-
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  format="dd/MM/yyyy"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="Check in date"
-                  value={selectedDate.journeyDate}
-                  onChange={handleJourneyDate}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-
-                <KeyboardDatePicker
-                  margin="normal"
-                  id="date-picker-dialog"
-                  label="Check out date"
-                  format="dd/MM/yyyy"
-                  value={selectedDate.returnDate}
-                  onChange={handleReturnDate}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#D6011D", color: "white" }}
-                  onClick={handleSearch}
+      <Container>
+        <Paper className={classes.paper}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className={classes.headerForm}
+          >
+            <Grid container>
+              <Grid item md={2}>
+                <label htmlFor="FROM">FROM</label>
+                <br />
+                <select
+                  id="cars"
+                  value={fromLocation}
+                  ref={register({ required: true })}
+                  name="from"
+                  onChange={handleFromLocation}
                 >
-                  Search
-                </Button>
-              </MuiPickersUtilsProvider>
-            </form>
-          </div>
-        </div>
-      </header>
-      {filtered.map((flt) => (
-        <SearchedComponent flt={flt}></SearchedComponent>
+                  {district.map((option) => (
+                    <option key={option._id} value={option.district}>
+                      {option.district}
+                    </option>
+                  ))}
+                </select>
+              </Grid>
+              <Grid item md={2}>
+                <label htmlFor="FROM">TO</label> <br />
+                <select
+                  id="cars"
+                  value={toLocation}
+                  ref={register({ required: true })}
+                  name="from"
+                  onChange={handleToLocation}
+                >
+                  {district.map((option) => (
+                    <option key={option._id} value={option.district}>
+                      {option.district}
+                    </option>
+                  ))}
+                </select>
+              </Grid>
+              <Grid item md={2}>
+                <label htmlFor="FROM">JOURNEY DATE</label>
+                <input
+                  ref={register({ required: true })}
+                  type="date"
+                  name="journeyDate"
+                  id=""
+                />
+              </Grid>
+              <Grid item md={2}>
+                <label htmlFor="FROM">RETURN DATE (OPTIONAL)</label>
+                <input
+                  ref={register({ required: true })}
+                  type="date"
+                  name="returnDate"
+                  id=""
+                />
+              </Grid>
+              <Grid item md={2}>
+                <input
+                  className="redButton"
+                  type="submit"
+                  value="Search Buses"
+                />
+              </Grid>
+            </Grid>
+          </form>
+        </Paper>
+      </Container>
+      {filtered.map((filter) => (
+        <SearchedComponent filter={filter} key={filter.id}></SearchedComponent>
       ))}
     </>
   );

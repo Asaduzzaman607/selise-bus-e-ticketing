@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Container, Grid, makeStyles, Paper, Select } from "@material-ui/core";
-import ViewSeats from "../../ViewSeats/ViewSeats";
+import { Container, Grid, makeStyles, Paper } from "@material-ui/core";
+import ViewSeats from "../../ViewSeats/Index";
 
 const useStyles = makeStyles({
   root: {},
@@ -18,13 +18,16 @@ const useStyles = makeStyles({
     color: "red",
     fontStyle: "italic",
   },
-  busName: {
+  colored: {
     color: "#7B1516",
+    fontWeight: "bold",
   },
 });
 
-const Index = ({ flt }) => {
+const Index = ({ filter }) => {
+  // destructuring from filter
   const {
+    name,
     from,
     to,
     seatsAvailable,
@@ -35,17 +38,20 @@ const Index = ({ flt }) => {
     endingPoint,
     busType,
     fare,
-  } = flt;
+  } = filter;
 
+  // needed state
   const [show, setShow] = useState(false);
 
+  //  view seat show handle
   const ShowSeats = () => {
     setShow(!show);
   };
-
+  // taking substring  0 to 3
   const startingFrom = from.substring(0, 3);
   const destination = to.substring(0, 3);
 
+  // material ui classes
   const classes = useStyles();
   return (
     <>
@@ -54,7 +60,7 @@ const Index = ({ flt }) => {
           <Grid container>
             <Grid item md={2}>
               <div>
-                <h5 className={classes.busName}>GreenLine</h5>
+                <h5 className={classes.colored}>{name}</h5>
                 <div>
                   <p>{id}</p>
                   <div className="d-flex">
@@ -71,23 +77,23 @@ const Index = ({ flt }) => {
             <Grid item md={2}>
               <div>
                 <p>DEPARTURE TIME</p>
-                <p>{departureTime}</p>
+                <p className={classes.colored}>{departureTime}</p>
               </div>
             </Grid>
             <Grid item md={2}>
               <div>
                 <p>ARRIVAL TIME</p>
-                <p>{arrivalTime}</p>
+                <p className={classes.colored}>{arrivalTime}</p>
               </div>
             </Grid>
             <Grid item md={2}>
               <div>
                 <p>SEAT AVAILABLE</p>
-                <p>{seatsAvailable}</p>
+                <p className={classes.colored}>{seatsAvailable}</p>
               </div>
             </Grid>
             <Grid item md={2}>
-              <p>{fare}</p>
+              <p className={classes.colored}>{fare}</p>
             </Grid>
             <Grid item md={2}>
               <div>
@@ -101,7 +107,7 @@ const Index = ({ flt }) => {
             </Grid>
           </Grid>
         </Paper>
-        {show && <ViewSeats busId={id}></ViewSeats>}
+        {show && <ViewSeats busId={id} fare={fare}></ViewSeats>}
       </Container>
     </>
   );

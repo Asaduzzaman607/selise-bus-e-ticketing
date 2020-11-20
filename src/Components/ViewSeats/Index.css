@@ -6,6 +6,9 @@
 .seats-container li{
    list-style: none;
 }
+.seatStatusColor{
+    justify-content: center;
+}
 .seatStatusColor li{
     list-style: none;
 }

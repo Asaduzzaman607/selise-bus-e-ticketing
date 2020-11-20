@@ -4,15 +4,10 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
-import reducer, { initialState } from "./Components/Redux/Reducer/Reducer";
-import { PersistGate } from "redux-persist/integration/react";
-import { StateProvider } from "./Components/Redux/StateProvider/Index";
 
 ReactDOM.render(
   <React.StrictMode>
-    <StateProvider initialState={initialState} reducer={reducer}>
-      <App />
-    </StateProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

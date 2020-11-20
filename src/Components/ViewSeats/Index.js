@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import WeekendOutlinedIcon from "@material-ui/icons/WeekendOutlined";
+import WeekendIcon from "@material-ui/icons/Weekend";
 import { useState } from "react";
-import "./ViewSeats.css";
-const ViewSeats = ({ busId, fare = 500 }) => {
+import "./Index.css";
+const Index = ({ busId, fare }) => {
   const seats = [
     0,
     2,
@@ -72,9 +72,11 @@ const ViewSeats = ({ busId, fare = 500 }) => {
     },
   ];
 
+  // needed states
   const [selectedSeat, setSelectedSeat] = useState([]);
   const [number, setNumber] = useState(false);
-  var timeout;
+
+  // handle search action
   const handleSeatSelection = (selected, available) => {
     if (number) {
     } else {
@@ -88,45 +90,52 @@ const ViewSeats = ({ busId, fare = 500 }) => {
     }
   };
 
+  // timeout after 10 minutes
   useEffect(() => {
     if (number === false)
-      var timer = setTimeout(() => setSelectedSeat([]), 1000);
+      var timer = setTimeout(() => setSelectedSeat([]), 600000);
 
     return () => clearTimeout(timer);
   });
 
-  const amount = fare * selectedSeat.length;
-  console.log(amount);
+  let serviceCharge = 40;
+  let insuranceCharge = 10;
+  // sub total
+  const subTotal = fare * selectedSeat.length;
+  console.log(subTotal);
 
-  
+  // grand Total
+  const grandTotal = subTotal + serviceCharge + insuranceCharge;
+
+  //  disabled after verifying number
   const ShowDetails = () => {
     setNumber(true);
     console.log(number);
   };
 
   return (
-    <div className="container">
-      <div className="row d-flex seatStatusColor">
+    <div className="container p-4 ml-auto">
+      <div className="row d-flex seatStatusColor mb-5">
         <li style={seatsStyle[1]} className="d-flex mr-3">
-          <WeekendOutlinedIcon /> <p>BOOKED(M)</p>{" "}
+          <WeekendIcon /> <p>BOOKED(M)</p>{" "}
         </li>
         <li style={seatsStyle[2]} className="d-flex mr-3">
-          <WeekendOutlinedIcon /> <p>BOOKED(F)</p>{" "}
+          <WeekendIcon /> <p>BOOKED(F)</p>{" "}
         </li>
         <li style={seatsStyle[3]} className="d-flex mr-3">
-          <WeekendOutlinedIcon /> <p>BLOCKED</p>{" "}
+          <WeekendIcon /> <p>BLOCKED</p>{" "}
         </li>
         <li className="d-flex mr-3">
-          <WeekendOutlinedIcon /> <p>AVAILABLE</p>{" "}
+          <WeekendIcon /> <p>AVAILABLE</p>{" "}
         </li>
         <li style={{ color: "green" }} className="d-flex mr-3">
-          <WeekendOutlinedIcon /> <p>SELECTED</p>{" "}
+          <WeekendIcon /> <p>SELECTED</p>{" "}
         </li>
         <li style={seatsStyle[4]} className="d-flex mr-3">
-          <WeekendOutlinedIcon /> <p>SOLD(M)</p>{" "}
+          <WeekendIcon /> <p>SOLD(M)</p>{" "}
         </li>
         <li style={seatsStyle[5]} className="d-flex mr-3">
-          <WeekendOutlinedIcon /> <p>SOLD(F)</p>{" "}
+          <WeekendIcon /> <p>SOLD(F)</p>{" "}
         </li>
       </div>
       <div className="row">
@@ -136,24 +145,36 @@ const ViewSeats = ({ busId, fare = 500 }) => {
               <li
                 onClick={() => handleSeatSelection(index, seat)}
                 style={
-                  selectedSeat.find((activeSeat) => activeSeat == index)
+                  selectedSeat.find((activeSeat) => activeSeat === index)
                     ? { color: "green" }
                     : seatsStyle[seat]
                 }
               >
-                <WeekendOutlinedIcon
+                <WeekendIcon
                   style={{ width: "40px", height: "50px", marginRight: "5px" }}
-                ></WeekendOutlinedIcon>
+                ></WeekendIcon>
               </li>
             ))}
           </ul>
         </div>
         <div className="col-md-4">
-          <h2>Seat Information</h2>
+          <h4>Seat Information</h4>
+          <p>
+            <small>Sub Total</small> <small>{subTotal}</small>
+          </p>
+          <p>
+            <small>Service Charge</small> <small>{serviceCharge}</small>
+          </p>
+          <p>
+            <small>Insurance Fee</small> <small>{insuranceCharge}</small>
+          </p>
+          <p>
+            <small>Grand Total</small> <small>{grandTotal}</small>
+          </p>
         </div>
         <div className="col-md-5">
           {number ? (
-            <h1>details</h1>
+            <h1>Booking details after verifying phone number</h1>
           ) : (
             <form>
               <div className="form-group">
@@ -177,4 +198,4 @@ const ViewSeats = ({ busId, fare = 500 }) => {
   );
 };
 
-export default ViewSeats;
+export default Index;
